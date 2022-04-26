@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+    database:
+        build: ./Registry-database
+        volumes:
+            - ./RC-API:/app
+        ports:
+            - '80:8080'
+        environment:
+            - VARIABLE=value
+
+    manager:
+        build: ./Registry-Manager
+        ports:
+            - '8080:8080'
+        environment:
+            - VARIABLE=value
+        depends_on:
+          - database
+
+    viewer-api:
+        build: ./Registry-Viewer-API
+        ports:
+            - '8080:8080'
+        environment:
+            - VARIABLE=value
+        depends_on:
+          - database
+    
+    viewer-ui:
+        build: ./Registry-Viewer
+        ports:
+            - '8080:8080'
+        environment:
+            - VARIABLE=value
+        depends_on:
+          - viewer-api
